@@ -1,0 +1,42 @@
+<h1>Search User limit</h1>
+<%= form_tag(user_search_path, method: :get) do %>
+  Username <%= text_field_tag :username,params[:username],required: true %>
+  DateRange <%= text_field_tag :daterange, nil,class: 'daterange' %>
+  <%= submit_tag 'Search' %>
+<% end %>
+<% if @user.present?%>
+  <h4>User:<%= @user.username%></h4>
+  <h4>User accuracy%: <%= @user_acc_per%></h4>
+<%end%>
+<% if @all_user.present? %>
+  <span>Note: Result include both 2000 user above and below the accuracy rate of current user</span>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">User id</th>
+        <th scope="col">Accurracy percentage week</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%@all_user.each do |a|%>
+        <tr>
+          <td><%= a[0] %></td>
+          <td><%= a[1] %></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  <%= will_paginate @all_user %>
+<%end%>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('input[class="daterange"]').daterangepicker({
+        locale: {
+      format: 'DD/MM/YYYY'
+    },
+    	 "maxSpan": {
+        "days": 6
+      },
+    });
+  });
+</script>
